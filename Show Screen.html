@@ -1,0 +1,52 @@
+<!DOCTYPE html>
+<html>
+<head>
+<meta charset="UTF-8">
+<title>Locker Registration - Student</title>
+<link rel="stylesheet" href="style.css">
+</head>
+<body>
+<h1>Student Locker Search</h1>
+<form id="studentForm">
+  <label>School Number</label>
+  <input type="text" name="school_no" required>
+  
+  <label>Name (English)</label>
+  <input type="text" name="name_en" required>
+  
+  <label>Name (Chinese)</label>
+  <input type="text" name="name_cn" required>
+  
+  <label>Class</label>
+  <input type="text" name="class" required>
+  
+  <label>Contact Number</label>
+  <input type="tel" name="contact" pattern="[0-9]{10,11}" required>
+
+  <button type="submit">Submit</button>
+</form>
+
+<script src="script.js"></script>
+<script>
+document.getElementById("studentForm").addEventListener("submit", function(e) {
+  e.preventDefault();
+
+  const data = {
+    school_no: this.school_no.value,
+    name_en: this.name_en.value,
+    name_cn: this.name_cn.value,
+    class: this.class.value,
+    contact: this.contact.value,
+    status: "waiting"
+  };
+
+  let waiting = JSON.parse(localStorage.getItem("waitingStudents")) || [];
+  waiting.push(data);
+  localStorage.setItem("waitingStudents", JSON.stringify(waiting));
+
+  alert("Your details have been sent to admin. Please wait for locker assignment.");
+  this.reset();
+});
+</script>
+</body>
+</html>

@@ -1,0 +1,130 @@
+<!DOCTYPE html>
+<html lang="en">
+<head>
+  <meta charset="UTF-8">
+  <meta name="viewport" content="width=device-width, initial-scale=1.0">
+  <title>Locker Registration</title>
+  <style>
+    body {
+      font-family: 'Segoe UI', sans-serif;
+      background-color: #f1f3f4;
+      padding: 30px;
+    }
+    .notice {
+      background: #fff;
+      padding: 20px;
+      border-radius: 12px;
+      max-width: 700px;
+      margin: auto auto 30px auto;
+      box-shadow: 0 4px 10px rgba(0,0,0,0.1);
+      line-height: 1.6;
+    }
+    .notice h2 {
+      margin-top: 0;
+      color: #1a73e8;
+    }
+    form {
+      background: #fff;
+      padding: 20px;
+      border-radius: 12px;
+      max-width: 500px;
+      margin: auto;
+      box-shadow: 0 4px 10px rgba(0,0,0,0.1);
+    }
+    label { display: block; margin-top: 12px; font-weight: 600; }
+    input {
+      width: 100%; padding: 10px; margin-top: 5px;
+      border: 1px solid #ccc; border-radius: 6px;
+    }
+    button {
+      margin-top: 20px; background-color: #1a73e8; color: white;
+      border: none; padding: 10px 20px; border-radius: 6px; cursor: pointer;
+    }
+    button:hover { background-color: #1765c1; }
+  </style>
+</head>
+<body>
+
+  <!-- Locker Rental Notice -->
+  <div class="notice">
+    <h2>📢 储物柜租借事宜 Locker Rental Notice</h2>
+
+    <h3>中文版</h3>
+    <p>致：全体同学</p>
+    <p><strong>储物柜租借事宜</strong></p>
+    <p>级长团将于 <strong>3/3（星期一）至 5/3（星期三）</strong> 进行储物柜租借手续。</p>
+    <p><strong>有兴趣租借储物柜的同学</strong> 请在明天准备并携带：</p>
+    <blockquote>
+      • RM30（租金）<br>
+      • 填妥的申请表格<br>
+      • 自备的锁头（padlock）及钥匙
+    </blockquote>
+    <p>2. 储物柜执委将会到各班带领同学前往报名处，请耐心等待执委的指示及安排。</p>
+    <p>3. 若有任何疑问，请联络：谢朝晋 3SK2（📞 012-578 4699）</p>
+    <p>锺中级长团 启</p>
+
+    <hr>
+
+    <h3>English Version</h3>
+    <p>To: All Students</p>
+    <p><strong>Locker Rental Notice</strong></p>
+    <p>The Board of Monitors will be handling locker rental registration from <strong>3rd March (Monday)</strong> to <strong>5th March (Wednesday)</strong>.</p>
+    <p><strong>Interested students should bring the following tomorrow:</strong></p>
+    <blockquote>
+      • RM30 (rental fee)<br>
+      • A completed application form<br>
+      • A personal padlock and keys
+    </blockquote>
+    <p>2. Locker committee members will visit each class to escort students to the locker area. Please wait for their instructions and arrangements.</p>
+    <p>3. For inquiries, please contact:<br>
+       Cheah Chao Jin 3SK2（📞 012-578 4699）</p>
+    <p>Regards,<br>Board of Monitors</p>
+  </div>
+
+  <!-- Locker Registration Form -->
+  <h1 style="text-align:center;">Locker Registration</h1>
+  <form id="registrationForm">
+    <label>Name (English)</label>
+    <input type="text" name="name_en" required>
+
+    <label>Name (Chinese)</label>
+    <input type="text" name="name_cn" required>
+
+    <label>Class</label>
+    <input type="text" name="class" required>
+
+    <label>School Number</label>
+    <input type="text" name="school_no" required>
+
+    <label>Contact Number</label>
+    <input type="tel" name="contact" pattern="[0-9]{10,11}" required>
+
+    <label>Email Address</label>
+    <input type="email" name="email" required>
+
+    <button type="submit">Register</button>
+  </form>
+
+  <script>
+    document.getElementById("registrationForm").addEventListener("submit", function(e) {
+      e.preventDefault();
+      const data = {
+        name_en: this.name_en.value,
+        name_cn: this.name_cn.value,
+        class: this.class.value,
+        school_no: this.school_no.value,
+        contact: this.contact.value,
+        email: this.email.value
+      };
+
+      let records = JSON.parse(localStorage.getItem("lockerRegistrations")) || [];
+      records.push(data);
+      localStorage.setItem("lockerRegistrations", JSON.stringify(records));
+
+      alert("Registration successful!");
+      this.reset();
+    });
+  </script>
+
+</body>
+</html>

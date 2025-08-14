@@ -1,0 +1,232 @@
+<!DOCTYPE html>
+<html lang="en">
+<head>
+  <meta charset="UTF-8" />
+  <meta name="viewport" content="width=device-width, initial-scale=1.0"/>
+  <title>Locker System</title>
+  <style>
+    body {
+      margin: 0;
+      font-family: 'Segoe UI', sans-serif;
+      background-color: #f0f2f5;
+      transition: margin-left 0.3s ease;
+      overflow-x: hidden;
+      color: #333;
+    }
+
+    .sidebar {
+      position: fixed;
+      top: 0;
+      left: 0;
+      width: 250px;
+      height: 100%;
+      background-color: #ffffff;
+      box-shadow: 2px 0 5px rgba(0, 0, 0, 0.1);
+      transition: width 0.3s ease;
+      z-index: 999;
+      display: flex;
+      flex-direction: column;
+    }
+
+    .sidebar.collapsed {
+      width: 60px;
+    }
+
+    .sidebar-header {
+      display: flex;
+      justify-content: space-between;
+      align-items: center;
+      padding: 15px;
+      border-bottom: 1px solid #ddd;
+    }
+
+    .sidebar.collapsed .logo,
+    .sidebar.collapsed .menu {
+      display: none;
+    }
+
+    .logo img {
+      height: auto;
+      width: 25%;
+      max-width: 500px;
+    }
+
+    .toggle-btn {
+      background-color: white;
+      border: 1px solid #ccc;
+      border-radius: 5px;
+      padding: 4px 8px;
+      font-size: 16px;
+      color: #333;
+      cursor: pointer;
+    }
+
+    .menu {
+      padding: 20px 15px;
+      display: flex;
+      flex-direction: column;
+      gap: 15px;
+    }
+
+    .menu a {
+      background-color: #f9f9f9;
+      border: 1px solid #ccc;
+      border-radius: 8px;
+      padding: 12px;
+      font-size: 16px;
+      text-decoration: none;
+      color: #333;
+      display: block;
+      transition: background 0.2s;
+    }
+
+    .menu a:hover {
+      background-color: #e0f7fa;
+    }
+
+    .menu a.active {
+      background-color: #b2ebf2;
+      border-color: #00bcd4;
+      font-weight: bold;
+    }
+
+    .main {
+      margin-left: 250px;
+      padding: 0;
+      transition: margin-left 0.3s ease;
+      position: relative;
+      min-height: 100vh;
+      overflow: hidden;
+      display: flex;
+      justify-content: center;
+      align-items: center;
+    }
+
+    .main.collapsed {
+      margin-left: 60px;
+    }
+
+    iframe {
+      width: 100%;
+      height: 100vh;
+      border: none;
+      display: none;
+    }
+
+    .loader {
+      display: none;
+      position: absolute;
+      top: 50%;
+      left: 50%;
+      transform: translate(-50%, -50%);
+      border: 6px solid #ddd;
+      border-top: 6px solid #00bcd4;
+      border-radius: 50%;
+      width: 40px;
+      height: 40px;
+      animation: spin 1s linear infinite;
+      z-index: 1000;
+    }
+
+    .welcome {
+      position: absolute;
+      inset: 0;
+      display: flex;
+      flex-direction: column;
+      align-items: center;
+      justify-content: center;
+      background: linear-gradient(to right, #cccccc 0%, #dde2e8 50%, #cbe8ff 100%);
+      text-align: center;
+      z-index: 1;
+    }
+
+    .welcome img {
+      width: 120px;
+      margin-bottom: 5px;
+      background-color: transparent;
+    }
+
+    .welcome h1 {
+      font-size: 48px;
+      margin-bottom: 10px;
+      color: #222;
+    }
+
+    .welcome p {
+      font-size: 24px;
+      margin: 0;
+      color: #444;
+    }
+
+    @keyframes spin {
+      0% { transform: translate(-50%, -50%) rotate(0deg); }
+      100% { transform: translate(-50%, -50%) rotate(360deg); }
+    }
+
+    @media (max-width: 600px) {
+      .sidebar {
+        width: 100%;
+        height: auto;
+        position: relative;
+      }
+
+      .main {
+        margin-left: 0;
+      }
+    }
+  </style>
+</head>
+<body>
+  <div class="sidebar" id="sidebar">
+    <div class="sidebar-header">
+      <div class="logo">
+        <img src="BOM LOGO.jpg" alt="Logo">
+      </div>
+      <button class="toggle-btn" onclick="toggleSidebar()">☰</button>
+    </div>
+    <div class="menu">
+      <a href="#" onclick="loadPage(this, 'Locker Management.html')">Locker Management</a>
+      <a href="#" onclick="loadPage(this, 'Locker Registration.html')">Locker Registration</a>
+      <a href="#" onclick="loadPage(this, 'Show Screen.html')">Show Screen</a>
+      <a href="#" onclick="loadPage(this, 'Previous Locker List.html')">Previous Locker List</a>
+    </div>
+  </div>
+
+  <div class="main">
+    <div class="loader" id="loader"></div>
+    <div class="welcome" id="welcome">
+      <img src="BOM LOGO NO BG.jpg" alt="BOM Logo">
+      <h1>Welcome</h1>
+      <p>Get started from the sidebar</p>
+    </div>
+    <iframe id="mainFrame"></iframe>
+  </div>
+
+  <script>
+    function toggleSidebar() {
+      const sidebar = document.getElementById('sidebar');
+      const main = document.querySelector('.main');
+      sidebar.classList.toggle('collapsed');
+      main.classList.toggle('collapsed');
+    }
+
+    function loadPage(el, filename) {
+      const iframe = document.getElementById('mainFrame');
+      const loader = document.getElementById('loader');
+      const welcome = document.getElementById('welcome');
+      const links = document.querySelectorAll('.menu a');
+      links.forEach(link => link.classList.remove('active'));
+      el.classList.add('active');
+
+      loader.style.display = 'block';
+      iframe.style.display = 'none';
+      welcome.style.display = 'none';
+      iframe.src = filename;
+      iframe.onload = () => {
+        loader.style.display = 'none';
+        iframe.style.display = 'block';
+      }
+    }
+  </script>
+</body>
+</html>
